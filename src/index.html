@@ -1,0 +1,345 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="css/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!--bootstrap tag-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.css" />
+    <!--bootstrap validation-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.1/css/bootstrapValidator.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.js" rel="stylesheet" />
+</head>
+<body>
+<div id="loader" style="display: none;"></div>
+
+    <div class="container">
+
+        <!-- Static navbar -->
+        <nav class="navbar navbar-default ">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Event Planner</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+
+                        <li class="active" id="liLogin"><a href="#" onclick="objUser.onMenuItemClick('login');">login</a></li>
+                        <li id="liSignUp"><a href="#" onclick="objUser.onMenuItemClick('signUp');">sign up</a></li>
+                        <li class="dropdown navsignup" id="liSignOut">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="" id="userNameHeader">Sumit Patel<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/account">Account</a></li>
+                                <li><a href="" onclick="objUser.onMenuItemClick('signOut');">Sign Out</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p class="navbar-btn">
+                                <a class="btn btn-primary btn-block" href="#" onclick="objUser.onMenuItemClick('createEvent');"><i class=" fa fa-lock"></i> Create Event</a>
+                            </p>
+                        </li>
+
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+
+
+        <!--<div class="jumbotron">-->
+        <div>
+            <div id="loginbox" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title">Sign In</div>
+                    </div>
+
+                    <div class="panel-body pnlLogin-body">
+
+                        <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
+
+                        <form id="loginform" class="form-horizontal" role="form">
+                            <div class="form-group" style="margin-bottom:20px">
+                                <label class="control-label"  for="login-username" ></label>
+                            <div class="input-group input-box  bs-float-label" >
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input id="login-username" type="text" class="form-control float-input" name="username" placeholder=" name@example.com" autocomplete="on" autofocus required>
+                                <label for="login-username" class="float-label">name@example.com</label>
+                            </div>
+                        </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="login-password"></label>
+                            <div class="input-group input-box  bs-float-label">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input id="login-password" type="password" class="form-control float-input" name="password" placeholder="password" required>
+                                <label for="login-password" class="float-label">password</label>
+                            </div>
+                        </div>
+                            <div class="form-group btnLogin-Group">
+                                <!-- Button -->
+
+                                <div class="col-sm-12 controls">
+                                    <button id="btn-login" type="submit" class="btn  btn-success" style="margin-left:20px;"><i class="icon-hand-right"></i> &nbsp Login</button>
+                                    <!--<a id="btn-login" href="#" class="btn btn-success" style="margin-left: 18px;"  type="submit">Login  </a>-->
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-md-12 control">
+                                    <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
+                                        Don't have an account!
+                                        <a href="#" onclick="$('#loginbox').hide(); $('#eventbox').hide(); $('#signupbox').show();$('#name').focus();">
+                                            Sign Up Here
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="signupbox" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title">Sign Up</div>
+                        <div style="float:right; font-size: 85%; position: relative; top:-10px"><a id="signinlink" href="#" onclick="$('#signupbox').hide(); $('#eventbox').hide(); $('#loginbox').show();$('#login-username').focus();">Sign In</a></div>
+                    </div>
+                    <div class="panel-body">
+
+                        <form id="signupform" class="form-horizontal" role="form">
+
+                            <div id="signupalert" style="display:none" class="alert alert-danger">
+                                <p>Error:</p>
+                                <span></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="name" class="col-md-3 control-label">Name</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" name="name" id="name" placeholder="Name"  autofocus>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="col-md-3 control-label">Email</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" name="email" placeholder="name@example.com" id="email" autocomplete="email" autofocus>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="pwd" class="col-md-3 control-label">Password</label>
+                                <div class="col-md-9">
+                                    <input type="password" class="form-control" name="password" placeholder="Password" id="pwd">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="rpwd" class="col-md-3 control-label">Confirm Password</label>
+                                <div class="col-md-9">
+                                    <input type="password" class="form-control" name="confirmPassword" placeholder="Confirm Password" id="rpwd">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="bdate" class="col-md-3 control-label">Birth date</label>
+                                <div class="col-md-9">
+                                    <input type="date" name="bdate" class="form-control datepicker" id="bdate" placeholder="Birth date">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="employer" class="col-md-3 control-label">Employer</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" name="employer" id="employer" placeholder="Employer"  autofocus>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="jobTitle" class="col-md-3 control-label">Job Title</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" name="jobTitle" id="jobTitle" placeholder="Job Title"  autofocus>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <!-- Button -->
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button id="btn-signup" type="submit" class="btn btn-info"><i class="icon-hand-right"></i> &nbsp Sign Up</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container" id="eventList">
+                <!--<div class="row">
+                    <div class="[ col-xs-6 col-sm-4 col-md-offset-1 col-md-2 ]">
+
+                        <a class="btn btn-primary btn-lg btn-block" href="#"><i class="fa fa-lock"></i> Create Event</a>
+                    </div>
+
+                </div>-->
+                <!--<div class="row">
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="[ col-xs-12 col-sm-offset-2 col-sm-8 ]">
+                        <ul class="event-list">
+                            <li>
+                                <time datetime="2014-07-20 0000">
+                                    <span class="day">8</span>
+                                    <span class="month">Jul</span>
+                                    <span class="year">2014</span>
+                                    <span class="time">12:00 AM</span>
+                                </time>
+                                <div class="info">
+                                    <h2 class="title">Shipment Ready</h2>
+                                    <p class="desc"></p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>-->
+
+
+
+
+
+
+
+
+            </div>
+
+            <div id="eventbox" class="modal fade col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 ">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Create Event</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form id="eventform" class="form-horizontal" role="form" >
+
+                                <div class="form-group">
+                                    <label for="event" class="col-md-3 control-label">Name</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="event" id="event" placeholder="Event Name"  autofocus>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="eventTypeText" class="col-md-3 control-label">Type</label>
+                                    <div class="col-md-9">
+                                        <datalist id="eventType">
+                                            <select name="eventType">
+                                                <option value="birthday party">birthday party</option>
+                                                <option value="conference talk">conference talk</option>
+                                                <option value="wedding">wedding</option>
+                                            </select>
+                                        </datalist>
+                                        <input type="text" list="eventType" id="eventTypeText" name="eventType" placeholder="Event Type" class="form-control"  />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="eventHost" class="col-md-3 control-label">Host By</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="eventHost" id="eventHost" placeholder="Event Host">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="sdate" class="col-md-3 control-label">Start date</label>
+                                    <div class="col-md-9">
+                                        <input type="datetime-local" name="sdate" class="form-control datepicker" id="sdate" placeholder="Start date">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="edate" class="col-md-3 control-label">End date</label>
+                                    <div class="col-md-9">
+                                        <input type="datetime-local" name="edate" class="form-control datepicker" id="edate" placeholder="End date">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="guest" class="col-md-3 control-label">Guest</label>
+                                    <div class="col-md-9">
+                                        <input type="text" name="guest" id="guest"
+                                               value="Veeral" data-role="tagsinput" class="guest" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="loc" class="col-md-3 control-label">Location</label>
+                                    <div class="col-md-9">
+                                        <input type='text' id="loc" name="loc" class='ajax-typeahead form-control' data-items="5" />
+                                    </div>
+                                   
+                                </div>
+                                <div class="form-group">
+                                    <label for="event" class="col-md-3 control-label">Message</label>
+                                    <div class="col-md-9">
+                                        <input type="textarea" class="form-control" name="optMessage" id="optMessage" placeholder="Optional Message" >
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                  
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                    <!--<button type="submit" class="btn btn-primary" >Save changes</button>-->
+                                    <!--<button type="button" class="btn btn-primary" onclick="objEvent.createEvent();">Save changes</button>-->
+                                </div>
+                            </form>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/floating-label/2.0.0/floatingLabel.min.js"></script>
+<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.1/js/bootstrapValidator.min.js"> </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.0/bootstrap3-typeahead.js"> </script>
+<script src="js/eventMaster.js"></script>
+<script src="js/user.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
+<script>
+    var config = {
+        apiKey: "AIzaSyDMqDHVDYDHRRrcD9qG_pE_6YuN6iyqkCg",
+        authDomain: "meetup-eplanner-78a26.firebaseapp.com",
+        databaseURL: "https://meetup-eplanner-78a26.firebaseio.com",
+        storageBucket: "meetup-eplanner-78a26.appspot.com",
+        messagingSenderId: "259678662586"
+    };
+    firebase.initializeApp(config);
+    $(function () {
+        objUser = new user();
+        objEvent = new eventMaster();
+        objUser.showHideElements();
+        objUser.validateLogin();
+        objUser.validateSignUp();
+        objEvent.bindLocation();
+        objEvent.validateEvent();
+        objUser.displayFloatingLabel();
+    });
+</script>
+</body>
+</html>
